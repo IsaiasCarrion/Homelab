@@ -25,11 +25,11 @@ La organización del repositorio sigue un enfoque modular para separar la lógic
 
 Actualmente, el *lab* gestiona los siguientes servicios desplegados mediante Docker:
 
-| Servicio | Funcionalidad |
-| **Dashy** | Dashboard centralizado para acceso rápido a todos los servicios. |
-| **Portainer** | Interfaz de gestión para el ciclo de vida de contenedores Docker. |
-| **Speedtest-Tracker** | Monitoreo y trazabilidad del ancho de banda y latencia de la red. |
-| **Uptime-Kuma** | Sistema de monitoreo de disponibilidad (*uptime*) con alertas configurables. |
+| Servicio              | Funcionalidad                                                                |
+| **Dashy**             | Dashboard centralizado para acceso rápido a todos los servicios.             |
+| **Portainer**         | Interfaz de gestión para el ciclo de vida de contenedores Docker.            |
+| **Speedtest-Tracker** | Monitoreo y trazabilidad del ancho de banda y latencia de la red.            |
+| **Uptime-Kuma**       | Sistema de monitoreo de disponibilidad (*uptime*) con alertas configurables. |
 
 ## 📚 Documentación
 
