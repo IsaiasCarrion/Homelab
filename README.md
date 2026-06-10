@@ -1,4 +1,3 @@
-````markdown
 # 🏠 homelab
 
 ![Estado](https://img.shields.io/badge/estado-en%20construcción-orange)
@@ -19,9 +18,7 @@ Infraestructura homelab orientada a:
 
 La arquitectura está basada en Proxmox VE con separación entre infraestructura core, servicios Docker y entornos de laboratorio.
 
----
-
-# 📦 Estructura del Repositorio
+## 📦 Estructura del Repositorio
 
 ```txt
 homelab/
@@ -55,11 +52,8 @@ homelab/
 ├── ROADMAP.md
 └── LICENSE
 ```
-````
 
----
-
-# 🧠 Filosofía del Homelab
+## 🧠 Filosofía del Homelab
 
 ```txt
 Proxmox Host
