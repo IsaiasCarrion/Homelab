@@ -23,9 +23,6 @@ La arquitectura está basada en Proxmox VE con separación entre infraestructura
 ```txt
 homelab/
 │
-├── assets/
-│   └── screenshots/
-│
 ├── compose/
 │   ├── dashy/
 │   ├── portainer/
@@ -49,7 +46,6 @@ homelab/
 │   └── update_hosts.sh
 │
 ├── README.md
-├── ROADMAP.md
 └── LICENSE
 ```
 
@@ -69,19 +65,7 @@ Aplicaciones
 Desarrollo & Aprendizaje
 ```
 
-Objetivos principales:
-
-- aislamiento de servicios
-- troubleshooting simple
-- infraestructura modular
-- backups independientes
-- buenas prácticas DevOps
-- networking real
-- laboratorio reproducible
-
----
-
-# 🌐 Red Principal
+## 🌐 Red Principal
 
 | Configuración | Valor               |
 | ------------- | ------------------- |
@@ -91,22 +75,18 @@ Objetivos principales:
 | Dominio Local | `home.arpa`         |
 | DHCP Clientes | `192.168.1.100-254` |
 
----
+## 🖥️ Infraestructura Core
 
-# 🖥️ Infraestructura Core
+| Servicio            | Tipo       | IP              | Hostname              |
+| ------------------- | ---------- | --------------- | --------------------- |
+| Proxmox VE          | Hypervisor | `192.168.1.20`  | `home.proxmox`        |
+| Adguard DNS         | LXC        | `192.168.1.21`  | `home.dns`            |
+| Nginx Proxy Manager | LXC        | `192.168.1.22`  | `home.nxinx`          |
+| Tailscale           | LXC        | `192.168.1.23`  | `home.tailscale`      |
+| Updatime Kuma       | LXC        | `192.168.1.24`  | `home.kuma`           |
+| Docker VM           | VM         | `192.168.1.30`  | `home.docker`         |
 
-| Servicio            | Tipo       | IP              | Hostname              | Estado |
-| ------------------- | ---------- | --------------- | --------------------- | ------ |
-| Proxmox VE          | Hypervisor | `192.168.1.20`  | `pve.home.arpa`       | ✅     |
-| Technitium DNS      | LXC        | `192.168.1.21`  | `dns.home.arpa`       | ✅     |
-| Nginx Proxy Manager | LXC        | `192.168.1.22`  | `npm.home.arpa`       | ✅     |
-| Tailscale           | LXC        | `192.168.1.23`  | `ts.home.arpa`        | ✅     |
-| Docker VM           | VM         | `192.168.1.30`  | `docker.home.arpa`    | ✅     |
-| Homelable           | LXC        | `192.168.1.103` | `homelable.home.arpa` | ✅     |
-
----
-
-# 🐳 Plataforma Docker
+## 🐳 Plataforma Docker
 
 La VM principal de contenedores utiliza Debian 13 + Docker Engine + Docker Compose.
 
@@ -117,29 +97,20 @@ La VM principal de contenedores utiliza Debian 13 + Docker Engine + Docker Compo
 - Portainer
 - Dashy
 - Speedtest Tracker
-- Uptime Kuma (pendiente)
-- PostgreSQL (planeado)
+- Uptime Kuma
+- PostgreSQL planeado
 - Redis (planeado)
 
----
+## 📊 Servicios Desplegados
 
-# 📊 Servicios Desplegados
+| Servicio            | URL                    | Función             |
+| ------------------- | ---------------------- | ------------------- |
+| Portainer           | `home.portainer`       | Gestión Docker      |
+| Speedtest Tracker   | `home.speed`           | Monitoreo ISP       |
+| Adguard DNS         | `home.dns`             | DNS + Adblock       |
+| Nginx Proxy Manager | `home.nginx`           | Reverse Proxy       |
 
-| Servicio            | URL                    | Función             | Estado |
-| ------------------- | ---------------------- | ------------------- | ------ |
-| Portainer           | `portainer.home.arpa`  | Gestión Docker      | ✅     |
-| Dashy               | `dashy.home.arpa`      | Dashboard principal | ✅     |
-| Speedtest Tracker   | `speed.home.arpa`      | Monitoreo ISP       | ✅     |
-| Technitium DNS      | `dns.home.arpa`        | DNS + Adblock       | ✅     |
-| Nginx Proxy Manager | `npm.home.arpa`        | Reverse Proxy       | ✅     |
-| Homelable           | `homelable.home.arpa`  | Mapa de red         | ✅     |
-| Grafana             | `grafana.home.arpa`    | Observabilidad      | 🚧     |
-| Prometheus          | `prometheus.home.arpa` | Métricas            | 🚧     |
-| Gitea               | `git.home.arpa`        | Git self-hosted     | 🚧     |
-
----
-
-# 🔐 Networking & Seguridad
+## 🔐 Networking & Seguridad
 
 ## DNS
 
@@ -152,20 +123,6 @@ Technitium DNS se utiliza como:
 - registros internos
 - wildcards
 
-### Blocklist
-
-```txt
-https://big.oisd.nl/
-```
-
-Modo recomendado:
-
-```txt
-NXDOMAIN
-```
-
----
-
 ## Reverse Proxy
 
 Nginx Proxy Manager provee:
@@ -174,8 +131,6 @@ Nginx Proxy Manager provee:
 - SSL interno
 - certificados wildcard
 - dominios locales
-
----
 
 ## VPN
 
@@ -186,9 +141,7 @@ Tailscale permite:
 - exit node
 - administración remota sin exponer puertos
 
----
-
-# 📁 Almacenamiento
+## 📁 Almacenamiento
 
 ## Storage Principal
 
@@ -197,13 +150,11 @@ Tailscale permite:
 | HDD 1TB   | Backups + Volúmenes Docker           |
 | NFS Share | Compartido entre Proxmox y Docker VM |
 
-### Punto de montaje
+## Punto de montaje
 
 ```txt
 /mnt/hdd-backup
 ```
-
----
 
 ## Estructura Persistente
 
@@ -217,36 +168,15 @@ Tailscale permite:
 └── dashboards/
 ```
 
----
-
-# 📊 Observabilidad
-
-## Herramientas
-
-| Herramienta       | Función                 |
-| ----------------- | ----------------------- |
-| Dashy             | Dashboard visual        |
-| Speedtest Tracker | Monitoreo ISP           |
-| Homelable         | Descubrimiento de red   |
-| Uptime Kuma       | Healthchecks            |
-| Grafana           | Dashboards métricos     |
-| Prometheus        | Recolección de métricas |
-
----
-
-# 🤖 Automatización
+## 🤖 Automatización
 
 ## Scripts
 
 | Script            | Función                  |
 | ----------------- | ------------------------ |
 | `backup.sh`       | Backups automatizados    |
-| `prune_docker.sh` | Limpieza Docker          |
-| `update_hosts.sh` | Actualización inventario |
 
----
-
-# 💻 Desarrollo
+## 💻 Desarrollo
 
 ## Servicios planeados
 
@@ -258,160 +188,7 @@ Tailscale permite:
 - Bots Discord
 - Bots Telegram
 - Workers Python
-- Ollama
-- n8n
 
----
-
-# 🧪 Labs Futuros
-
-| Proyecto                | Estado |
-| ----------------------- | ------ |
-| Kubernetes Lab          | 🚧     |
-| AI / Ollama             | 🚧     |
-| Observabilidad completa | 🚧     |
-| GitOps                  | 🚧     |
-| CI/CD self-hosted       | 🚧     |
-| Authentik               | 🚧     |
-
----
-
-# 📌 Inventario de Red
-
-## Reserva de IPs
-
-| Rango               | Uso             |
-| ------------------- | --------------- |
-| `192.168.1.1`       | Router          |
-| `192.168.1.2-19`    | Infraestructura |
-| `192.168.1.20-29`   | Hypervisors     |
-| `192.168.1.30-39`   | Docker / Dev    |
-| `192.168.1.40-49`   | Storage         |
-| `192.168.1.50-69`   | Labs / AI       |
-| `192.168.1.70-99`   | Expansión       |
-| `192.168.1.100-254` | DHCP            |
-
----
-
-# 📸 Capturas
-
-## Dashboards
-
-- [pendiente]
-- Dashy
-- Portainer
-- Homelable
-- Grafana
-
----
-
-# 🚀 Roadmap
-
-## Fase 1 — Core Infra
-
-- [x] Proxmox
-- [x] DNS
-- [x] Reverse Proxy
-- [x] Docker VM
-- [x] Tailscale
-
-## Fase 2 — Plataforma Dev
-
-- [x] Portainer
-- [x] Dashy
-- [x] Speedtest Tracker
-- [ ] Gitea
-- [ ] PostgreSQL
-- [ ] Redis
-
-## Fase 3 — Observabilidad
-
-- [ ] Uptime Kuma
-- [ ] Grafana
-- [ ] Prometheus
-- [ ] Alerting
-
-## Fase 4 — Labs
-
-- [ ] Kubernetes
-- [ ] Ollama
-- [ ] AI Workloads
-- [ ] GitOps
-
----
-
-# 🔧 Comandos Útiles
-
-## Proxmox
-
-```bash
-qm list
-pct list
-pveversion
-```
-
-## Docker
-
-```bash
-docker ps
-docker compose up -d
-docker logs <container>
-```
-
-## Networking
-
-```bash
-nmap -sn 192.168.1.0/24
-ip a
-ip route
-```
-
----
-
-# 📚 Aprendizajes
-
-- separación de servicios
-- networking básico/intermedio
-- reverse proxy
-- DNS interno
-- troubleshooting
-- virtualización
-- automatización
-- observabilidad
-- infraestructura reproducible
-
----
-
-# 🤝 Contribuir
-
-```bash
-git clone https://github.com/[usuario]/homelab.git
-cd homelab
-```
-
-Abrí un issue o PR si querés sugerir mejoras de arquitectura o tooling.
-
----
-
-# 📄 Licencia
+## 📄 Licencia
 
 MIT License
-
----
-
-# 🚧 Estado del Proyecto
-
-Infraestructura activa en evolución continua.
-
-Actualmente utilizada para:
-
-- desarrollo
-- testing
-- automatización
-- aprendizaje DevOps
-- self-hosting
-- experimentación
-
-```
-
-```
