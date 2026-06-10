@@ -1,194 +1,69 @@
-# 🏠 homelab
+# Homelab - Infrastructure & Services
 
-![Estado](https://img.shields.io/badge/estado-en%20construcción-orange)
-![Proxmox](https://img.shields.io/badge/Proxmox-VE-E57000)
-![Docker](https://img.shields.io/badge/Docker-enabled-2496ED)
-![Debian](https://img.shields.io/badge/Debian-13-A81D33)
-![Última actualización](https://img.shields.io/badge/update-2026--06--05-blue)
+Este repositorio contiene la configuración, despliegue y documentación técnica de mi entorno *self-hosted*. El objetivo de este Homelab es centralizar servicios de monitoreo, gestión de infraestructura y utilidades, garantizando una administración eficiente, escalable y reproducible a través de contenedores Docker y metodologías *Infrastructure as Code* (IaC).
 
-Infraestructura homelab orientada a:
+## 📋 Tabla de Contenidos
 
-- desarrollo
-- self-hosting
-- DevOps
-- networking
-- automatización
-- observabilidad
-- aprendizaje de infraestructura real
+- [📂 Estructura de directorios](#-estructura-de-directorios)
+- [🐳 Servicios](#-servicios)
+- [📚 Documentación](#-documentación)
+- [🗂️ Assets de infraestructura](#️-assets-de-infraestructura)
+- [⚙️ Scripts](#️-scripts)
+- [📈 Estado del proyecto](#-estado-del-proyecto)
+- [📄 Licencia](#-licencia)
 
-La arquitectura está basada en Proxmox VE con separación entre infraestructura core, servicios Docker y entornos de laboratorio.
+## 📂 Estructura de directorios
 
-## 📦 Estructura del Repositorio
+La organización del repositorio sigue un enfoque modular para separar la lógica de despliegue, la documentación y los datos de estado:
 
-```txt
-homelab/
-│
-├── compose/
-│   ├── dashy/
-│   ├── portainer/
-│   ├── speedtest-tracker/
-│   └── uptime-kuma/
-│
-├── docs/
-│   ├── arquitectura.md
-│   ├── bitacora.md
-│   └── runbooks.md
-│
-├── inventory/
-│   ├── dns.md
-│   ├── hosts.md
-│   ├── ports.md
-│   └── services.md
-│
-├── scripts/
-│   ├── backup.sh
-│   ├── prune_docker.sh
-│   └── update_hosts.sh
-│
-├── README.md
-└── LICENSE
+- `compose/`: Contiene los archivos `docker-compose.yml` para cada stack de servicios.
+- `docs/`: Documentación técnica detallada, bitácoras de cambios y guías operativas.
+- `assets/`: Base de datos de la infraestructura (mapeo de puertos, configuración DNS, hosts y servicios).
+- `scripts/`: Herramientas de automatización para mantenimiento, como backups y tareas recurrentes.
+
+## 🐳 Servicios
+
+Actualmente, el *lab* gestiona los siguientes servicios desplegados mediante Docker:
+
+| Servicio | Funcionalidad |
+| **Dashy** | Dashboard centralizado para acceso rápido a todos los servicios. |
+| **Portainer** | Interfaz de gestión para el ciclo de vida de contenedores Docker. |
+| **Speedtest-Tracker** | Monitoreo y trazabilidad del ancho de banda y latencia de la red. |
+| **Uptime-Kuma** | Sistema de monitoreo de disponibilidad (*uptime*) con alertas configurables. |
+
+## 📚 Documentación
+
+La gestión del conocimiento se encuentra centralizada para asegurar una rápida recuperación ante fallos o cambios en la configuración:
+
+- [Arquitectura](docs/arquitectura.md): Diagrama lógico y diseño de red del entorno.
+- [Bitácora](docs/bitacora.md): Registro histórico de cambios, actualizaciones y resolución de incidencias.
+- [Runbooks](docs/runbooks.md): Procedimientos operativos estándar (SOP) para tareas comunes y recuperación ante desastres.
+
+## 🗂️ Assets de infraestructura
+
+La carpeta `assets/` funciona como el motor de datos de la infraestructura. Aquí se define el estado deseado y la configuración lógica del *lab*:
+
+- `dns.md`: Configuración de registros DNS locales y resolución de nombres.
+- `hosts.md`: Inventario de dispositivos físicos y virtuales que componen el entorno.
+- `ports.md`: Matriz de asignación de puertos para evitar conflictos en los servicios expuestos.
+- `services.md`: Definición y metadatos de los servicios *self-hosted*.
+
+## ⚙️ Scripts
+
+La automatización es clave en este entorno. Actualmente contamos con:
+
+- `backup.sh`: Script destinado a la creación de copias de seguridad de las configuraciones y volúmenes críticos para garantizar la persistencia de datos.
+
+```bash
+# Ejemplo de ejecución para backup
+chmod +x scripts/backup.sh
+./scripts/backup.sh
 ```
 
-## 🧠 Filosofía del Homelab
+## 📈 Estado del proyecto
 
-```txt
-Proxmox Host
-    ↓
-Infraestructura Base (LXC)
-    ↓
-Docker Platform
-    ↓
-Servicios
-    ↓
-Aplicaciones
-    ↓
-Desarrollo & Aprendizaje
-```
-
-## 🌐 Red Principal
-
-| Configuración | Valor               |
-| ------------- | ------------------- |
-| Red           | `192.168.1.0/24`    |
-| Gateway       | `192.168.1.1`       |
-| DNS Principal | `192.168.1.21`      |
-| Dominio Local | `home.arpa`         |
-| DHCP Clientes | `192.168.1.100-254` |
-
-## 🖥️ Infraestructura Core
-
-| Servicio            | Tipo       | IP              | Hostname              |
-| ------------------- | ---------- | --------------- | --------------------- |
-| Proxmox VE          | Hypervisor | `192.168.1.20`  | `home.proxmox`        |
-| Adguard DNS         | LXC        | `192.168.1.21`  | `home.dns`            |
-| Nginx Proxy Manager | LXC        | `192.168.1.22`  | `home.nxinx`          |
-| Tailscale           | LXC        | `192.168.1.23`  | `home.tailscale`      |
-| Updatime Kuma       | LXC        | `192.168.1.24`  | `home.kuma`           |
-| Docker VM           | VM         | `192.168.1.30`  | `home.docker`         |
-
-## 🐳 Plataforma Docker
-
-La VM principal de contenedores utiliza Debian 13 + Docker Engine + Docker Compose.
-
-## Base Stack
-
-- Docker Engine
-- Docker Compose
-- Portainer
-- Dashy
-- Speedtest Tracker
-- Uptime Kuma
-- PostgreSQL planeado
-- Redis (planeado)
-
-## 📊 Servicios Desplegados
-
-| Servicio            | URL                    | Función             |
-| ------------------- | ---------------------- | ------------------- |
-| Portainer           | `home.portainer`       | Gestión Docker      |
-| Speedtest Tracker   | `home.speed`           | Monitoreo ISP       |
-| Adguard DNS         | `home.dns`             | DNS + Adblock       |
-| Nginx Proxy Manager | `home.nginx`           | Reverse Proxy       |
-
-## 🔐 Networking & Seguridad
-
-## DNS
-
-Technitium DNS se utiliza como:
-
-- DNS local
-- cache DNS
-- split DNS
-- adblocking
-- registros internos
-- wildcards
-
-## Reverse Proxy
-
-Nginx Proxy Manager provee:
-
-- proxy reverso
-- SSL interno
-- certificados wildcard
-- dominios locales
-
-## VPN
-
-Tailscale permite:
-
-- acceso remoto seguro
-- subnet router
-- exit node
-- administración remota sin exponer puertos
-
-## 📁 Almacenamiento
-
-## Storage Principal
-
-| Recurso   | Uso                                  |
-| --------- | ------------------------------------ |
-| HDD 1TB   | Backups + Volúmenes Docker           |
-| NFS Share | Compartido entre Proxmox y Docker VM |
-
-## Punto de montaje
-
-```txt
-/mnt/hdd-backup
-```
-
-## Estructura Persistente
-
-```txt
-/mnt/hdd-backup/docker/
-├── portainer/
-├── stacks/
-├── volumes/
-├── backups/
-├── git/
-└── dashboards/
-```
-
-## 🤖 Automatización
-
-## Scripts
-
-| Script            | Función                  |
-| ----------------- | ------------------------ |
-| `backup.sh`       | Backups automatizados    |
-
-## 💻 Desarrollo
-
-## Servicios planeados
-
-- Gitea
-- CI/CD
-- PostgreSQL
-- Redis
-- APIs
-- Bots Discord
-- Bots Telegram
-- Workers Python
+Este proyecto se encuentra en constante evolución. El lab está en fase de refinamiento técnico, donde se busca mejorar la automatización, la seguridad perimetral y la documentación exhaustiva de cada componente.
 
 ## 📄 Licencia
 
-MIT License
+Este proyecto está bajo la licencia MIT. Puedes consultar el archivo LICENSE para más detalles sobre las condiciones de uso.
